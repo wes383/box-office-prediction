@@ -1,0 +1,3 @@
+family,best_value,best_params,trials
+lgb,237.53135421462446,"{'n_estimators': 900, 'learning_rate': 0.07776315213340648, 'num_leaves': 96, 'max_depth': 4, 'subsample': 0.995412008540932, 'colsample_bytree': 0.8787158525531815, 'min_child_samples': 20, 'reg_alpha': 1.0839451028888296, 'reg_lambda': 0.29928539753397987}",18
+xgb,242.9748266520302,"{'n_estimators': 700, 'learning_rate': 0.07420875758464679, 'max_depth': 4, 'min_child_weight': 6.376515374024432, 'subsample': 0.9227427202175194, 'colsample_bytree': 0.8273169435988608, 'reg_alpha': 0.1560325914202908, 'reg_lambda': 2.136819570083986, 'gamma': 0.7682522267114764}",18
