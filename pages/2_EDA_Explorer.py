@@ -43,7 +43,7 @@ with st.sidebar:
     st.header("Filters")
     year_min = int(eda["release_year"].min())
     year_max = int(eda["release_year"].max())
-    year_range = st.slider("Release year", min_value=year_min, max_value=year_max, value=(max(year_min, year_max - 15), year_max))
+    year_range = st.slider("Release year", min_value=year_min, max_value=year_max, value=(2000, 2025))
     selected_genres = st.multiselect(
         "Primary genre",
         options=sorted(eda["primary_genre"].dropna().unique().tolist()),
@@ -52,7 +52,7 @@ with st.sidebar:
     selected_languages = st.multiselect(
         "Language",
         options=sorted(eda["original_language"].dropna().unique().tolist())[:30],
-        default=["en"],
+        default=[],
     )
     only_proxy = st.toggle("Only theatrical proxy", value=False)
     exclude_zero_revenue = st.toggle("Exclude zero revenue rows", value=False)
@@ -391,22 +391,24 @@ with tab3:
         use_container_width=True,
     )
 
-    english_stats = (
-        filtered.assign(language_group=filtered["original_language"].eq("en").map({True: "English", False: "Non-English"}))
-        .groupby("language_group", observed=False)
+    language_stats = (
+        filtered.groupby("original_language", observed=False)
         .agg(films=("title", "count"), mean_revenue=("revenue", "mean"), median_revenue=("revenue", "median"))
         .reset_index()
+        .query("films >= 50")
+        .sort_values("mean_revenue", ascending=False)
+        .head(12)
     )
     bottom_right.plotly_chart(
         px.bar(
-            english_stats,
-            x="language_group",
+            language_stats,
+            x="original_language",
             y="mean_revenue",
             color="films",
             template="plotly_white",
             color_continuous_scale=["#d9cab3", "#1c6e8c"],
-            title="English vs non-English revenue",
-        ).update_layout(xaxis_title="Language group", yaxis_title="Mean revenue"),
+            title="Revenue by language",
+        ).update_layout(xaxis_title="Language", yaxis_title="Mean revenue"),
         use_container_width=True,
     )
 
